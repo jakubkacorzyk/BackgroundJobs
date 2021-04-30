@@ -40,11 +40,12 @@ namespace BackgroundJobsTests.Controllers
                 })
                 .ToArray();
         }
-        
-        [HttpGet("/jobTest")]
-        public void BackgroundJobTest()
+
+        [HttpGet("/jobTest/{numberOfJobs}")]
+        public void BackgroundJobTest(int numberOfJobs)
         {
-            BackgroundJob.Enqueue(() => GetWeather());
+            for (var i = 0; i < numberOfJobs; i++)
+                BackgroundJob.Enqueue(() => GetWeather());
         }
 
         [HttpGet("/jobTest/fails/{numberOfFailures}")]
@@ -85,7 +86,7 @@ namespace BackgroundJobsTests.Controllers
             await Task.Delay(10000);
             _isWeatherJobDone = true;
         }
-        
+
         public static async Task GetWeatherFailures(int fails)
         {
             _isWeatherJobDone = false;
@@ -103,6 +104,7 @@ namespace BackgroundJobsTests.Controllers
                 _numberOfFails++;
                 throw new Exception($"Failure number {_numberOfFails}/{fails}");
             }
+
             _isWeatherJobDone = true;
         }
     }
