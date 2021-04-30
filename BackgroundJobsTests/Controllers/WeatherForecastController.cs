@@ -71,7 +71,7 @@ namespace BackgroundJobsTests.Controllers
                 () => GetWeather());
         }
 
-        public static void GetWeather()
+        public static async Task GetWeather()
         {
             _isWeatherJobDone = false;
             var rng = new Random();
@@ -82,11 +82,11 @@ namespace BackgroundJobsTests.Controllers
                     Summary = Summaries[rng.Next(Summaries.Length)]
                 })
                 .ToArray();
-            Thread.Sleep(10000);
+            await Task.Delay(10000);
             _isWeatherJobDone = true;
         }
         
-        public static void GetWeatherFailures(int fails)
+        public static async Task GetWeatherFailures(int fails)
         {
             _isWeatherJobDone = false;
             var rng = new Random();
@@ -97,7 +97,7 @@ namespace BackgroundJobsTests.Controllers
                     Summary = Summaries[rng.Next(Summaries.Length)]
                 })
                 .ToArray();
-            Thread.Sleep(10000);
+            await Task.Delay(10000);
             if (_numberOfFails <= fails)
             {
                 _numberOfFails++;
